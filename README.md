@@ -43,7 +43,7 @@ git status
 
 ### **2\. Preparar selectivamente solo los proyectos**
 
-Para evitar subir el README.md que estamos modificando, preparamos únicamente las carpetas del juego usando sus rutas específicas separadas por un espacio:
+Para evitar subir el README.md que estamos modificando, preparamos únicamente las carpetas con  sus rutas específicas separadas por un espacio:
 ```
 git add hangman-api hangman-e2e hangman-front
 ```
