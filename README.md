@@ -297,6 +297,9 @@ git checkout es un comando de Git que se utiliza para cambiar de rama dentro de 
 ```bash 
 git checkout -b add-hangman-front-ci
 ```
+![Captura](./capturas/tarea-1-5.png)
+
+<br>
 
 ### 3.2 Añadimos el fichero  al repositorio y lo subimos 
 
@@ -305,5 +308,7 @@ git add .github/workflows/hangman-front-pr.yml
 git commit -m "Add hangman-front pull request CI"
 git push origin add-hangman-front-ci
 ```
+![Captura](./capturas/tarea-1-6.png)
 
+<br>
 
