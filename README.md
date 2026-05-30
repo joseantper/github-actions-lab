@@ -92,9 +92,11 @@ git push origin main
 ![Captura](./capturas/tarea-1-3.png)
 
 <br>
+<br>
+ 
 ----
 
- <br>
+
 ## **1\. EJERCICIO 1: Diseño del Workflow de CI (Frontend)**
 
 Para el desarrollo del pipeline de integración continua, se crea la rama de trabajo **add-ci-workflow**. El objetivo es implementar un flujo automatizado que valide el código bajo las siguientes condiciones:
