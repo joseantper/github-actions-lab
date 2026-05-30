@@ -343,3 +343,121 @@ Como se aprecia hemos estado saltando de rama en rama, con lo que hemos aprendid
 ![Captura](./capturas/tarea-1-17.png)
 Finalmente, hemos hecho un cambio en github, pero habria que traerlo a nuestro visual estudio para seguir trabajando en local. En verdad esto no lo pedia, pero el camino se ido haciendo al andar
 ![Captura](./capturas/tarea-1-18.png)
+
+
+
+<br>
+<br>
+<br>
+<br>
+
+----
+
+
+## **1\. EJERCICIO 2:  Workflow de CD (Frontend)**
+
+Crea un nuevo workflow que se dispare manualmente y haga lo siguiente:
+
+    Crear una nueva imagen de Docker
+    Publicar dicha imagen en el container registry de GitHub
+
+    Nota: intenta usar las actions de Docker vistas en clase
+
+
+## 2. Como lo hacemos? 
+### 1º Creando el fichero YAML
+
+Esto se esta haciendo muy largo, vamos al modo micromachine, paso el codigo comentado para facilitar interprestacon
+
+```YAML 
+
+name: Docker Publish
+
+# Controla cuándo se ejecuta el workflow
+on:
+  workflow_dispatch: # Permite activar el despliegue manualmente desde la pestaña "Actions" de GitHub
+
+# Configuración de permisos seguros para el token automático de GitHub
+permissions:
+  contents: read    # Permiso para leer el código de tu repositorio
+  packages: write  # Permiso crucial para poder subir la imagen a GitHub Packages (GHCR)
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest # Ejecuta el proceso en una máquina virtual Linux limpia
+
+    steps:
+      # 1. Descarga el código fuente del repositorio en la máquina virtual
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Configura Buildx, el motor moderno de Docker que permite optimizaciones y caché
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. Inicia sesión en el registro de contenedores de GitHub (GHCR)
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }} # Usa automáticamente tu nombre de usuario de GitHub
+          password: ${{ secrets.GITHUB_TOKEN }} # Usa el token temporal interno para autenticarse
+
+      # 4. Extrae de forma inteligente las etiquetas y metadatos (evita escribir rutas a mano)
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }} # Estructura el nombre: ghcr.io/tu-usuario/tu-repo
+
+      # 5. Construye la imagen de Docker y la sube a GitHub Packages
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./hangman-front # UBICACIÓN: Carpeta donde está el código del frontend
+          file: ./hangman-front/Dockerfile # RUTA: Dónde está físicamente tu Dockerfile
+          push: true # Le indica que no solo la cree, sino que la suba a internet
+          tags: ${{ steps.meta.outputs.tags }} # Aplica de forma dinámica las etiquetas generadas en el paso anterior
+          labels: ${{ steps.meta.outputs.labels }} # Añade metadatos útiles a la imagen (autor, fecha, etc.)
+```
+
+<br>
+A continuación se presenta una infografia del codigo comentado por bloques
+
+![Captura](./capturas/tarea-2-1.png)
+
+<br>
+
+## 3. Como lo instalamos ? 
+
+
+### 3.1 Añadimos el fichero  al repositorio y lo subimos 
+
+```
+git add .github/workflows/cd.yaml
+git commit -m "ci: añadir workflow de despliegue continuo cd.yaml"
+git push origin main
+```
+<br>
+
+![Captura](./capturas/tarea-2-2.png)
+
+
+### 3.2 En GitHub, ir a Action y Seleccionar Docker Publish
+
+![Captura](./capturas/tarea-2-3.png)
+
+### 3.3 Al pulsaar RUN WORKFLOW el docker comienza a ejecutarse
+![Captura](./capturas/tarea-2-4.png)
+
+<br>
+<br>
+
+Esta pantalla demuestra que todo el trabajo de Despliegue Continuo (CD) que configuramos en los pasos anteriores ha funcionado a la perfección.
+
+Los puntos clave son los siguientes:
+
+* **Ejecución exitosa:** El flujo de trabajo que configuramos se ha completado de principio a fin sin ningún error, tardando apenas 45 segundos en hacer todo el proceso.  
+* **Lectura de nuestras instrucciones:** El sistema de GitHub ha leído correctamente los pasos que le indicamos dentro del archivo cd.yaml que subimos antes a la rama principal.  
+* **Construcción de la aplicación:** Siguiendo esas instrucciones, el servidor ha cogido el código fuente de nuestro **hangman-front**  y ha construido la imagen de Docker correctamente.  
+* **Objetivo de CD cumplido:** El paso final y más importante es que ha publicado esa imagen automáticamente. Gracias a esto, el código ya no solo es un texto guardado en un repositorio, sino que se ha convertido en un paquete terminado y listo para ser instalado o desplegado en cualquier servidor de producción.
