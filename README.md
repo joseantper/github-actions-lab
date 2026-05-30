@@ -68,7 +68,9 @@ Finalmente, enviamos las carpetas confirmadas en el paso anterior a la rama prin
 git push origin main
 ```
 <br>
+
 ![Captura](./capturas/tarea-1-3.png)
+
 <br>
 ----
 
