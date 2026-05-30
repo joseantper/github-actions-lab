@@ -354,7 +354,7 @@ Finalmente, hemos hecho un cambio en github, pero habria que traerlo a nuestro v
 ----
 
 
-## **1\. EJERCICIO 2:  Workflow de CD (Frontend)**
+## **2\. EJERCICIO 2:  Workflow de CD (Frontend)**
 
 Crea un nuevo workflow que se dispare manualmente y haga lo siguiente:
 
