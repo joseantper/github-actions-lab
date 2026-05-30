@@ -535,7 +535,7 @@ git fetch origin
 git reset --hard origin/main
 ```
 
-### 5 Solo sobreescribir el readme.md
+## 5 Solo sobreescribir el readme.md
 ```
 git add README.md
 
