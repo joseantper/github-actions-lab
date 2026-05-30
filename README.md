@@ -21,7 +21,7 @@ Se inicializa el repositorio remoto bajo el nombre **github-actions-lab**. Acto 
    * Teníamos un archivo README.md modificado localmente que **no** queríamos subir todavía porque queríamos redactarlo desde cero.  
 2. **Envío a la nube (git push):** Subimos las carpetas a nuestro repositorio remoto de GitHub para que estén disponibles públicamente.
 <br>
-## Comandos y Código Utilizado
+## **Comandos y Código Utilizado**
 
 A continuación se detalla la secuencia exacta de comandos ejecutados en la terminal para completar el proceso con éxito:
 
