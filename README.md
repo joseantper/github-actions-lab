@@ -48,10 +48,8 @@ Para este primer pipeline de CI, se define el archivo de configuración en forma
 2. **Diagnóstico del estado (git status):** Consultamos a Git para ver qué archivos nuevos teníamos en nuestro ordenador que aún no existían en la nube (GitHub). Detectamos que:  
    * Teníamos las 3 carpetas nuevas sin rastrear (*untracked*).  
    * Teníamos un archivo README.md modificado localmente que **no** queríamos subir todavía porque queríamos redactarlo desde cero.  
-2. **Selección inteligente (git add parcial):** En lugar de añadir todo con git add ., le indicamos a Git los nombres específicos de las carpetas que queríamos preparar para subir, dejando fuera el README.md.  
-4. **Confirmación (git commit):** Creamos una "foto" o punto de control en el historial de nuestra máquina con los nuevos proyectos.  
-5. **Envío a la nube (git push):** Subimos las carpetas a nuestro repositorio remoto de GitHub para que estén disponibles públicamente.
-
+2. **Envío a la nube (git push):** Subimos las carpetas a nuestro repositorio remoto de GitHub para que estén disponibles públicamente.
+<br>
 ## **Comandos y Código Utilizado**
 
 A continuación se detalla la secuencia exacta de comandos ejecutados en la terminal para completar el proceso con éxito:
@@ -63,7 +61,7 @@ Antes de hacer nada, comprobamos qué archivos estaban listos para ser procesado
 git status
 ```
 <br>
-![Captura 1](capturas/captura-1-1.PNG)
+![Captura](capturas/captura-1-1.png)
 <br>
 
 * **Resultado:** Git nos mostró en rojo las carpetas nuevas (hangman-\*) y el archivo README.md modificado.
@@ -83,6 +81,9 @@ Registramos estos cambios en el historial de versiones con un mensaje claro y de
 ```
 git commit \-m "feat: añadir carpetas del proyecto hangman"
 ```
+<br>
+![Captura](capturas/captura-1-2.png)
+<br>
 
 ### **4\. Subir los archivos a GitHub**
 
@@ -92,4 +93,7 @@ Finalmente, enviamos las carpetas confirmadas en el paso anterior a la rama prin
 git push origin main
 ```
 <br>
+![Captura](capturas/captura-1-2.png)
+<br>
+
 
