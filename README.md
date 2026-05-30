@@ -32,7 +32,9 @@ Antes de hacer nada, comprobamos qué archivos estaban listos para ser procesado
 git status
 ```
 <br>
+
 ![Captura](./capturas/tarea-1-1.png)
+
 <br>
 
 * **Resultado:** Git nos mostró en rojo las carpetas nuevas (hangman-\*) y el archivo README.md modificado.
@@ -53,7 +55,9 @@ Registramos estos cambios en el historial de versiones con un mensaje claro y de
 git commit \-m "feat: añadir carpetas del proyecto hangman"
 ```
 <br>
+
 ![Captura](./capturas/tarea-1-2.png)
+
 <br>
 
 ### **4\. Subir los archivos a GitHub**
