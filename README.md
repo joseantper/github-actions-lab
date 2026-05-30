@@ -5,6 +5,26 @@
 
 ---
 
+# **¿Qué es GitHub Actions?**
+
+**GitHub Actions** es la herramienta de automatización integrada directamente dentro de GitHub. Te permite crear flujos de trabajo (**workflows**) para compilar, probar y desplegar tu código de forma totalmente automática cada vez que ocurre algo en tu repositorio.
+
+En el mundo de DevOps, es la herramienta que utilizamos para implementar **CI/CD** (Integración Continua y Despliegue Continuo).
+
+## **Los 4 Conceptos Clave**
+
+Para entender cómo funciona, imagina que es una línea de producción con los siguientes elementos:
+
+1. **Workflow (Flujo de trabajo):** Es el proceso automatizado completo. Se escribe en un archivo de configuración .yaml dentro de la carpeta .github/workflows/.  
+2. **Event (Evento / Disparador):** Es la chispa que enciende el motor. Por ejemplo, "cuando alguien suba código" (push) o "cuando se abra una solicitud de revisión" (pull\_request).  
+3. **Jobs (Trabajos) y Runners:** Un workflow se divide en tareas llamadas *Jobs* (como "compilar" o "testear"). Cada Job se ejecuta en una máquina virtual limpia en la nube de GitHub (llamada *Runner*, que suele ser un servidor Ubuntu, Windows o macOS).  
+4. **Actions (Acciones):** Son pequeños bloques de código ya creados por GitHub o por la comunidad que realizan tareas repetitivas (como descargar tu código, configurar Node.js o conectarse a un servidor). ¡Son como "piezas de LEGO" que conectas para armar tu flujo\!
+
+<br>
+<br>
+
+---
+
 
 ## **0\. Configuración Inicial del Entorno**
 
@@ -103,7 +123,72 @@ Para este primer pipeline de CI, se define el archivo de configuración en forma
 <br>
 <br>
 
----
+Debes crear un nuevo workflow que se dispare cuando haya cambios en el proyecto hangman-front y exista una nueva pull request (deben darse las dos condiciones a la vez). El workflow ejecutará las siguientes operaciones:
+
+    Build del proyecto
+    Ejecución de los test unitarios
+
+
+
+En nuestro caso
+
+```YAML
+
+name: Practica 01 CI Hangman Front 
+
+on:
+  pull_request:
+    paths:
+      - 'hangman-front/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: hangman-front
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: hangman-front/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run unit tests
+        run: npm test
+
+```
+
+
+## 3. La instalacion
+
+### 3.1  Hacemos una rama nueva 
+
+git checkout es un comando de Git que se utiliza para cambiar de rama dentro de un repositorio o para recuperar archivos concretos. Cuando haces algo como git checkout -b nueva-rama, estás creando una nueva rama y moviéndote a ella al mismo tiempo. Las ramas permiten trabajar en cambios o nuevas funcionalidades sin afectar al código principal del proyecto hasta que todo esté listo.
+
+```bash 
+git checkout -b add-hangman-front-ci
+```
+
+### 3.2 Añadimos el fichero  al repositorio y lo subimos 
+
+```bash 
+git add .github/workflows/hangman-front-pr.yml
+git commit -m "Add hangman-front pull request CI"
+git push origin add-hangman-front-ci
+```
 
 
 
