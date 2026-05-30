@@ -116,24 +116,20 @@ El **workflow** se ejecutará de forma automática únicamente cuando se cumplan
 ### **Estructura de Archivos**
 
 En GitHub Actions, los flujos de trabajo deben residir en el directorio específico **.github/workflows/** ubicado en la raíz del repositorio.  
-Para este primer pipeline de CI, se define el archivo de configuración en formato YAML bajo el nombre **ci.yaml**, quedando la estructura de directorios de la siguiente manera:
+Para este primer pipeline de CI, se define el archivo de configuración en formato YAML bajo el nombre **ci.yaml**
 
-## **Anatomía de ci.yaml**
-
-* **Atributo name:** Se define la propiedad fundamental para identificar el flujo en la interfaz de GitHub. Para este caso, lo nombramos como **Integración continua**.
-
-<br>
-<br>
-<<<<<<< HEAD
-
+### **TRABAJO A REALIZAR**
 Debes crear un nuevo workflow que se dispare cuando haya cambios en el proyecto hangman-front y exista una nueva pull request (deben darse las dos condiciones a la vez). El workflow ejecutará las siguientes operaciones:
 
     Build del proyecto
     Ejecución de los test unitarios
+<br>
+<br>
+
+## **Anatomía de ci.yaml**
 
 
-
-En nuestro caso vamos a analizarlo por bloques
+Este es el codigo completo, luego lo analizaremos por bloques
 
 
 ```YAML
@@ -186,18 +182,18 @@ jobs:
 ```
 <br>
 
-Vamos a explicar el codigo por bloques
+
 
 ### **1\. El Nombre del Workflow**
 
-YAML  
+```YAML
 name: Integración continua
-
-* **¿A qué se refiere?** A la primera línea del archivo. Es el identificador global del pipeline. Este es el texto que leerás en la pestaña "Actions" de tu repositorio de GitHub para saber qué proceso se está ejecutando.
+```
+* **¿Cuál es el objetivo de esta instrucción?** A la primera línea del archivo. Es el identificador global del pipeline. Este es el texto que leerás en la pestaña "Actions" de tu repositorio de GitHub para saber qué proceso se está ejecutando.
 
 ### **2\. Los Disparadores (Eventos)**
 
-YAML  
+```YAML
 on:  
   push:  
     branches: \[ main \]  
@@ -205,165 +201,27 @@ on:
   pull\_request:  
     branches: \[ main \]  
     paths: \[ 'hangman-front/\*\*' \]
+```
 
-* **¿A qué se refiere?** Al bloque on:. Define las reglas que encienden la automatización.  
+* **¿Qué hace exactamente este bloque?** Al bloque on:. Define las reglas que encienden la automatización.  
 * **push / pull\_request**: Le dice a GitHub que actúe cuando alguien empuje código directamente o abra un Pull Request.  
 * **branches: \[ main \]**: Limita estos eventos a la rama principal (main). Si trabajas en una rama llamada develop, el pipeline no saltará.  
 * **paths: \[ 'hangman-front/' \]**: El filtro inteligente. Solo se activa si los archivos modificados pertenecen a la carpeta del frontend.
 
 ### **3\. El Primer Trabajo (Fase de Construcción)**
 
-YAML  
+```YAML
 jobs:  
   build:  
     runs-on: ubuntu-latest
-
-* **¿A qué se refiere?** Al inicio del bloque jobs.  
+```
+* **¿Para qeu sirve?** Al inicio del bloque jobs.  
 * **build:**: Es el nombre personalizado que le damos a nuestro primer trabajo.  
 * **runs-on: ubuntu-latest**: Solicita a GitHub que aprovisione un servidor con la última versión de Ubuntu Linux para ejecutar esta fase.
 
 #### **Pasos del Build (steps)**
-
-YAML  
-    steps:  
-      \- name: Checkout  
-        uses: actions/checkout@v6  
-          
-      \- name: Setup Node.js version  
-        uses: actions/setup-node@v6  
-        with:  
-          node-version: 18  
-            
-      \- name: Build  
-        working-directory: ./hangman-front  
-        run: |  
-          npm ci  
-          npm run build \--if-present
-
-* **¿A qué se refiere?** A la lista de tareas dentro del trabajo build.  
-* **actions/checkout@v6**: Acción que clona el código de tu repositorio dentro del servidor de Ubuntu.  
-* **actions/setup-node@v6**: Acción que instala Node.js versión 18 en ese servidor.  
-* **run: | ...**: Ejecuta comandos de terminal clásicos. Primero npm ci para instalar dependencias limpias, y luego npm run build para compilar el proyecto frontend. El working-directory asegura que estos comandos se lancen dentro de la carpeta correcta.
-
-### **4\. El Segundo Trabajo (Fase de Pruebas y Dependencia)**
-
-YAML  
-  test:  
-    runs-on: ubuntu-latest  
-    needs: build
-
-* **¿A qué se refiere?** Al segundo bloque principal dentro de jobs, situado al mismo nivel que build.  
-* **test:**: El nombre de esta nueva fase. Se ejecutará en un servidor Ubuntu totalmente nuevo e independiente.  
-* **needs: build**: **(La parte más importante de este bloque).** Crea un requisito estricto. Significa: *"No empieces a ejecutar el trabajo test hasta que el trabajo build haya terminado correctamente"*. Si build falla, test se cancela.
-
-#### **Pasos del Test (steps)**
-
-YAML  
-    steps:  
-      \- name: Checkout  
-        uses: actions/checkout@v6  
-          
-      \- name: Setup Node.js version  
-        uses: actions/setup-node@v6  
-        with:  
-          node-version: 18  
-            
-      \- name: Unit tests  
-        working-directory: ./hangman-front  
-        run: |  
-          npm ci  
-          npm run test
-
-* **¿A qué se refiere?** A las tareas de la fase de pruebas.  
-* **Repetición de pasos**: Como es una máquina virtual nueva, observa que tenemos que volver a repetir el Checkout (bajar el código) y el Setup Node.js (instalar Node).  
-* **run: | npm ci ... npm run test**: Vuelve a instalar las dependencias en esta nueva máquina y finalmente lanza el comando que ejecuta las pruebas unitarias para validar que el código funciona.
-=======
-
-Debes crear un nuevo workflow que se dispare cuando haya cambios en el proyecto hangman-front y exista una nueva pull request (deben darse las dos condiciones a la vez). El workflow ejecutará las siguientes operaciones:
-
-    Build del proyecto
-    Ejecución de los test unitarios
-
-
-
-En nuestro caso
 
 ```YAML
-
-name: Practica 01 CI Hangman Front 
-
-on:
-  pull_request:
-    paths:
-      - 'hangman-front/**'
-
-jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: hangman-front
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: hangman-front/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build project
-        run: npm run build
-
-      - name: Run unit tests
-        run: npm test
-
-```
-
-
-## 3. La instalacion
-
-### 3.1  Hacemos una rama nueva 
-
-git checkout es un comando de Git que se utiliza para cambiar de rama dentro de un repositorio o para recuperar archivos concretos. Cuando haces algo como git checkout -b nueva-rama, estás creando una nueva rama y moviéndote a ella al mismo tiempo. Las ramas permiten trabajar en cambios o nuevas funcionalidades sin afectar al código principal del proyecto hasta que todo esté listo.
-
-```bash 
-git checkout -b add-hangman-front-ci
-```
-
-### 3.2 Añadimos el fichero  al repositorio y lo subimos 
-
-```bash 
-git add .github/workflows/hangman-front-pr.yml
-git commit -m "Add hangman-front pull request CI"
-git push origin add-hangman-front-ci
-```
-
-
-
->>>>>>> bce9864dad3e72da3076877a29b97614c64b0bbd
-
-### **3\. El Primer Trabajo (Fase de Construcción)**
-
-YAML  
-jobs:  
-  build:  
-    runs-on: ubuntu-latest
-
-* **¿A qué se refiere?** Al inicio del bloque jobs.  
-* **build:**: Es el nombre personalizado que le damos a nuestro primer trabajo.  
-* **runs-on: ubuntu-latest**: Solicita a GitHub que aprovisione un servidor con la última versión de Ubuntu Linux para ejecutar esta fase.
-
-#### **Pasos del Build (steps)**
-
-YAML  
     steps:  
       \- name: Checkout  
         uses: actions/checkout@v6  
@@ -378,18 +236,20 @@ YAML
         run: |  
           npm ci  
           npm run build \--if-present
+```
 
-* **¿A qué se refiere?** A la lista de tareas dentro del trabajo build.  
+* **¿Qué hace exactamente este bloque?** A la lista de tareas dentro del trabajo build.  
 * **actions/checkout@v6**: Acción que clona el código de tu repositorio dentro del servidor de Ubuntu.  
 * **actions/setup-node@v6**: Acción que instala Node.js versión 18 en ese servidor.  
 * **run: | ...**: Ejecuta comandos de terminal clásicos. Primero npm ci para instalar dependencias limpias, y luego npm run build para compilar el proyecto frontend. El working-directory asegura que estos comandos se lancen dentro de la carpeta correcta.
 
 ### **4\. El Segundo Trabajo (Fase de Pruebas y Dependencia)**
 
-YAML  
+```YAML 
   test:  
     runs-on: ubuntu-latest  
     needs: build
+```
 
 * **¿A qué se refiere?** Al segundo bloque principal dentro de jobs, situado al mismo nivel que build.  
 * **test:**: El nombre de esta nueva fase. Se ejecutará en un servidor Ubuntu totalmente nuevo e independiente.  
@@ -397,7 +257,7 @@ YAML
 
 #### **Pasos del Test (steps)**
 
-YAML  
+```YAML 
     steps:  
       \- name: Checkout  
         uses: actions/checkout@v6  
@@ -412,17 +272,19 @@ YAML
         run: |  
           npm ci  
           npm run test
+```
 
-* **¿A qué se refiere?** A las tareas de la fase de pruebas.  
+* **¿Cómo afecta esto al workflow?** A las tareas de la fase de pruebas.  
 * **Repetición de pasos**: Como es una máquina virtual nueva, observa que tenemos que volver a repetir el Checkout (bajar el código) y el Setup Node.js (instalar Node).  
 * **run: | npm ci ... npm run test**: Vuelve a instalar las dependencias en esta nueva máquina y finalmente lanza el comando que ejecuta las pruebas unitarias para validar que el código funciona.
 
 <br>
+<br>
+
 Podemos observar en esta infografía, lo que hace por bloques de forma esquemática
 
 ![Captura](./capturas/tarea-1-4.png)
 
-
 <br>
 
 
@@ -443,3 +305,5 @@ git add .github/workflows/hangman-front-pr.yml
 git commit -m "Add hangman-front pull request CI"
 git push origin add-hangman-front-ci
 ```
+
+
