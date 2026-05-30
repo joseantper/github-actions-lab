@@ -1,34 +1,48 @@
-name: Practica 01 CI Hangman Front 
+name: Docker Publish
 
+# Controla cuándo se ejecuta el workflow
 on:
-  pull_request:
-    paths:
-      - 'hangman-front/**'
+  workflow_dispatch: # Permite activar el despliegue manualmente desde la pestaña "Actions" de GitHub
+
+# Configuración de permisos seguros para el token automático de GitHub
+permissions:
+  contents: read    # Permiso para leer el código de tu repositorio
+  packages: write  # Permiso crucial para poder subir la imagen a GitHub Packages (GHCR)
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: hangman-front
+  docker:
+    runs-on: ubuntu-latest # Ejecuta el proceso en una máquina virtual Linux limpia
 
     steps:
-      - name: Checkout
+      # 1. Descarga el código fuente del repositorio en la máquina virtual
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      # 2. Configura Buildx, el motor moderno de Docker que permite optimizaciones y caché
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. Inicia sesión en el registro de contenedores de GitHub (GHCR)
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: hangman-front/package-lock.json
+          registry: ghcr.io
+          username: ${{ github.actor }} # Usa automáticamente tu nombre de usuario de GitHub
+          password: ${{ secrets.GITHUB_TOKEN }} # Usa el token temporal interno para autenticarse
 
-      - name: Install dependencies
-        run: npm ci
+      # 4. Extrae de forma inteligente las etiquetas y metadatos (evita escribir rutas a mano)
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }} # Estructura el nombre: ghcr.io/tu-usuario/tu-repo
 
-      - name: Build project
-        run: npm run build
-
-      - name: Run unit tests
-        run: npm test
+      # 5. Construye la imagen de Docker y la sube a GitHub Packages
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./hangman-front # UBICACIÓN: Carpeta donde está el código del frontend
+          file: ./hangman-front/Dockerfile # RUTA: Dónde está físicamente tu Dockerfile
+          push: true # Le indica que no solo la cree, sino que la suba a internet
+          tags: ${{ steps.meta.outputs.tags }} # Aplica de forma dinámica las etiquetas generadas en el paso anterior
+          labels: ${{ steps.meta.outputs.labels }} # Añade metadatos útiles a la imagen (autor, fecha, etc.)
