@@ -312,3 +312,34 @@ git push origin add-hangman-front-ci
 
 <br>
 
+Modificamos fichero app.tsx
+
+![Captura](./capturas/tarea-1-7.png)
+
+incluimos un comentario
+![Captura](./capturas/tarea-1-8.png)
+
+Sincronizamos los cambios con nuestro github
+![Captura](./capturas/tarea-1-9.png)
+
+Nos aparece que hay cambios en la rama
+![Captura](./capturas/tarea-1-10.png)
+
+Pulsamos Compare y pull request, y vemos los cambios
+![Captura](./capturas/tarea-1-11.png)
+
+Nos aparece un conflicto, porque por error mio, habia modificado la rama main y la rama add-hangman-front-ci
+![Captura](./capturas/tarea-1-12.png)
+
+Solucionamos el conflicto
+![Captura](./capturas/tarea-1-13.png)
+Elegimos con cual de los comentarios queremos quedarnos, nos aparecen los 2 que eran diferentes
+![Captura](./capturas/tarea-1-14.png)
+Una vez resuelto el conflicto, le damos a comit merge y aparece esta pantalla
+![Captura](./capturas/tarea-1-15.png)
+Aqui vemos que los cambios entre ramas se nos ha ido de las manos, estamos en actions, solo buscabamos la de la líena superior, pero hemos aprendido un montón sobre las ramas, y como quedarse colgado de una rama
+![Captura](./capturas/tarea-1-16.png)
+Como se aprecia hemos estado saltando de rama en rama, con lo que hemos aprendido que cuando cambias de rama, hasta desaparecen los archivos creados en tu ordenador. Ostia gorda
+![Captura](./capturas/tarea-1-17.png)
+Finalmente, hemos hecho un cambio en github, pero habria que traerlo a nuestro visual estudio para seguir trabajando en local. En verdad esto no lo pedia, pero el camino se ido haciendo al andar
+![Captura](./capturas/tarea-1-18.png)
