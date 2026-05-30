@@ -124,6 +124,7 @@ Para este primer pipeline de CI, se define el archivo de configuración en forma
 
 <br>
 <br>
+<<<<<<< HEAD
 
 Debes crear un nuevo workflow que se dispare cuando haya cambios en el proyecto hangman-front y exista una nueva pull request (deben darse las dos condiciones a la vez). El workflow ejecutará las siguientes operaciones:
 
@@ -209,6 +210,78 @@ on:
 * **push / pull\_request**: Le dice a GitHub que actúe cuando alguien empuje código directamente o abra un Pull Request.  
 * **branches: \[ main \]**: Limita estos eventos a la rama principal (main). Si trabajas en una rama llamada develop, el pipeline no saltará.  
 * **paths: \[ 'hangman-front/' \]**: El filtro inteligente. Solo se activa si los archivos modificados pertenecen a la carpeta del frontend.
+=======
+
+Debes crear un nuevo workflow que se dispare cuando haya cambios en el proyecto hangman-front y exista una nueva pull request (deben darse las dos condiciones a la vez). El workflow ejecutará las siguientes operaciones:
+
+    Build del proyecto
+    Ejecución de los test unitarios
+
+
+
+En nuestro caso
+
+```YAML
+
+name: Practica 01 CI Hangman Front 
+
+on:
+  pull_request:
+    paths:
+      - 'hangman-front/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: hangman-front
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: hangman-front/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run unit tests
+        run: npm test
+
+```
+
+
+## 3. La instalacion
+
+### 3.1  Hacemos una rama nueva 
+
+git checkout es un comando de Git que se utiliza para cambiar de rama dentro de un repositorio o para recuperar archivos concretos. Cuando haces algo como git checkout -b nueva-rama, estás creando una nueva rama y moviéndote a ella al mismo tiempo. Las ramas permiten trabajar en cambios o nuevas funcionalidades sin afectar al código principal del proyecto hasta que todo esté listo.
+
+```bash 
+git checkout -b add-hangman-front-ci
+```
+
+### 3.2 Añadimos el fichero  al repositorio y lo subimos 
+
+```bash 
+git add .github/workflows/hangman-front-pr.yml
+git commit -m "Add hangman-front pull request CI"
+git push origin add-hangman-front-ci
+```
+
+
+
+>>>>>>> bce9864dad3e72da3076877a29b97614c64b0bbd
 
 ### **3\. El Primer Trabajo (Fase de Construcción)**
 
