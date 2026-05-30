@@ -1,12 +1,16 @@
 # github-actions-lab de Jose Antonio Perez Alias
 
+<br>
+<br>
+
+---
 
 
 ## **0\. Configuración Inicial del Entorno**
 
 Se inicializa el repositorio remoto bajo el nombre **github-actions-lab**. Acto seguido, se realiza el **commit** inicial que incluye este archivo **README.md** junto con el código fuente de la aplicación **hangman-front**.
 
-## **1\. Diseño del Workflow de CI (Frontend)**
+## **1\. EJERCICIO 1: Diseño del Workflow de CI (Frontend)**
 
 Para el desarrollo del pipeline de integración continua, se crea la rama de trabajo **add-ci-workflow**. El objetivo es implementar un flujo automatizado que valide el código bajo las siguientes condiciones:
 
@@ -31,15 +35,59 @@ Para este primer pipeline de CI, se define el archivo de configuración en forma
 
 * **Atributo name:** Se define la propiedad fundamental para identificar el flujo en la interfaz de GitHub. Para este caso, lo nombramos como **Integración continua**.
 
-### **💡 Un tip pro de CI/CD para tu archivo YAML:**
+<br>
+<br>
 
-Cuando configures el trigger por paths para que solo actúe en el frontend, asegúrate de estructurarlo así en tu ci.yaml para que cumpla estrictamente lo que pides:
+---
 
-YAML  
-on:  
-  pull\_request:  
-    paths:  
-      \- 'hangman-front/\*\*'
+## **¿Como Exportar el proyecto?** 
 
-Esto evitará que el pipeline se dispare innecesariamente si cambias cosas en la raíz o en otros proyectos del repo. ¿Quieres que te ayude a redactar el código YAML completo para este flujo?
+1. **Descarga en local:** Conseguimos las carpetas del proyecto original de Lemoncode (hangman-api, hangman-e2e y hangman-front) y las colocamos dentro de nuestro directorio de trabajo local github-actions-lab.
+2. **Diagnóstico del estado (git status):** Consultamos a Git para ver qué archivos nuevos teníamos en nuestro ordenador que aún no existían en la nube (GitHub). Detectamos que:  
+   * Teníamos las 3 carpetas nuevas sin rastrear (*untracked*).  
+   * Teníamos un archivo README.md modificado localmente que **no** queríamos subir todavía porque queríamos redactarlo desde cero.  
+2. **Selección inteligente (git add parcial):** En lugar de añadir todo con git add ., le indicamos a Git los nombres específicos de las carpetas que queríamos preparar para subir, dejando fuera el README.md.  
+4. **Confirmación (git commit):** Creamos una "foto" o punto de control en el historial de nuestra máquina con los nuevos proyectos.  
+5. **Envío a la nube (git push):** Subimos las carpetas a nuestro repositorio remoto de GitHub para que estén disponibles públicamente.
+
+## **Comandos y Código Utilizado**
+
+A continuación se detalla la secuencia exacta de comandos ejecutados en la terminal para completar el proceso con éxito:
+
+### **1\. Comprobar el estado del repositorio**
+
+Antes de hacer nada, comprobamos qué archivos estaban listos para ser procesados:
+```
+git status
+```
+<br>
+![Captura 1](capturas/captura-1-1.PNG)
+<br>
+
+* **Resultado:** Git nos mostró en rojo las carpetas nuevas (hangman-\*) y el archivo README.md modificado.
+<br>
+<br>
+
+### **2\. Preparar selectivamente solo los proyectos**
+
+Para evitar subir el README.md que estamos modificando, preparamos únicamente las carpetas del juego usando sus rutas específicas separadas por un espacio:
+```
+git add hangman-api hangman-e2e hangman-front
+```
+
+### **3\. Crear el punto de guardado local**
+
+Registramos estos cambios en el historial de versiones con un mensaje claro y descriptivo que explique qué estamos añadiendo:
+```
+git commit \-m "feat: añadir carpetas del proyecto hangman"
+```
+
+### **4\. Subir los archivos a GitHub**
+
+Finalmente, enviamos las carpetas confirmadas en el paso anterior a la rama principal (main) en el servidor remoto (origin):
+
+```
+git push origin main
+```
+<br>
 
