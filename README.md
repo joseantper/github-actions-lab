@@ -534,3 +534,12 @@ git fetch origin
 # 2. Forzar a que mi ordenador sea EXACTAMENTE igual a la nube (borra lo no guardado)
 git reset --hard origin/main
 ```
+
+### 5 Solo sobreescribir el readme.md
+```
+git add README.md
+
+git commit -m "docs: añadir chuleta de comandos git al readme"
+
+git push origin main
+```
