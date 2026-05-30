@@ -461,3 +461,76 @@ Los puntos clave son los siguientes:
 * **Lectura de nuestras instrucciones:** El sistema de GitHub ha leído correctamente los pasos que le indicamos dentro del archivo cd.yaml que subimos antes a la rama principal.  
 * **Construcción de la aplicación:** Siguiendo esas instrucciones, el servidor ha cogido el código fuente de nuestro **hangman-front**  y ha construido la imagen de Docker correctamente.  
 * **Objetivo de CD cumplido:** El paso final y más importante es que ha publicado esa imagen automáticamente. Gracias a esto, el código ya no solo es un texto guardado en un repositorio, sino que se ha convertido en un paquete terminado y listo para ser instalado o desplegado en cualquier servidor de producción.
+
+
+<br>
+<br>
+
+---
+
+
+
+# Guía de Supervivencia Git: Comandos Principales
+
+Durante esta práctica de Integración y Despliegue Continuo (CI/CD), hemos utilizado varios comandos esenciales de Git para gestionar nuestras ramas, resolver conflictos y forzar la sincronización con el repositorio remoto.Aquí dejo un resumen de los más importantes:
+
+## 1. Flujo de Trabajo Básico (Guardar y Subir)
+El ciclo normal para empaquetar archivos y subirlos a la nube.
+
+```
+# 1. Preparar todos los archivos modificados (o usar la ruta de un archivo específico)
+git add .
+
+# 2. Sellar el paquete con un mensaje descriptivo
+git commit -m "docs: añadir capturas y actualizar readme"
+
+# 3. Subir los cambios a la rama principal en GitHub
+git push origin main
+```
+
+
+## 2. Gestión y Cambio de Ramas
+Comandos para navegar entre distintas versiones del proyecto.
+
+```
+# Ver en qué rama estoy actualmente (la activa tiene un asterisco *)
+git branch
+
+# Cambiar a una rama ya existente (ej: volver a main)
+git checkout main
+
+# Crear una rama NUEVA y cambiarme a ella automáticamente
+git checkout -b nombre-de-nueva-rama
+```
+
+## 3. Sincronización y Fusión
+Para mantener el ordenador local y GitHub al día.
+
+```
+# Descargar a mi ordenador los últimos cambios que hay en GitHub
+git pull origin main
+
+# Fusionar los cambios de una rama secundaria hacia la rama actual
+git merge nombre-rama-secundaria
+
+# 🆘 ABORTAR: Cancelar una fusión si aparecen ventanas raras o conflictos
+git merge --abort
+```
+
+## 4. Forzar y Sobrescribir (Modo "Peligro / Rescate")
+Estos comandos son muy útiles cuando el historial local y el de la nube se desincronizan y sabemos perfectamente qué versión queremos imponer.
+
+A) Imponer lo que hay en mi PC hacia GitHub (Sobrescribir la nube):
+```
+# Obligar a GitHub a borrar su versión y aceptar exactamente la mía
+git push origin main --force
+```
+
+B) Imponer lo que hay en GitHub hacia mi PC (Sobrescribir mi ordenador):Si mi local está roto y quiero descargar la versión limpia de la nube:
+```
+# 1. Descargar la información fresca de internet
+git fetch origin
+
+# 2. Forzar a que mi ordenador sea EXACTAMENTE igual a la nube (borra lo no guardado)
+git reset --hard origin/main
+```
